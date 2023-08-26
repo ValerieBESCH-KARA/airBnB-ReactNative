@@ -11,9 +11,28 @@ import axios from "axios";
 import { useState } from "react";
 import Constants from "expo-constants";
 
-export default function SignInScreen({ setToken }) {
+export default function SignInScreen({ setToken, navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const handelSubmit = async () => {
+    // console.log("submit");
+
+    try {
+      const response = await axios.post(
+        "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/log_in",
+        {
+          email: email,
+          password: password,
+        }
+      );
+
+      console.log("response signIn>>>", response.data.token);
+      setToken(response.data.token);
+    } catch (error) {
+      console.log("catch SignInScreen>>>", error.response);
+    }
+  };
 
   return (
     <KeyboardAwareScrollView
@@ -23,28 +42,33 @@ export default function SignInScreen({ setToken }) {
       <Image source={require("../assets/logoBnB.png")} style={styles.logo} />
       <Text style={styles.title}>Sign in</Text>
 
+      {/* <Text>
+        {email} {password}
+      </Text> */}
+
       <View style={[styles.width, styles.marginBottom]}>
         <TextInput
           style={styles.textInput}
           placeholder="email"
-          onChangeText={() => {}}
+          onChangeText={(text) => {
+            setEmail(text);
+          }}
           value={email}
           placeholderTextColor="#DCDCDD"
-        >
-          email
-        </TextInput>
+        />
+
         <TextInput
           style={styles.textInput}
           placeholder="password"
-          onChangeText={() => {}}
+          onChangeText={(text) => {
+            setPassword(text);
+          }}
           value={password}
           placeholderTextColor="#DCDCDD"
-        >
-          password
-        </TextInput>
+        />
       </View>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handelSubmit}>
         <Text style={styles.btn}>Sign in</Text>
       </TouchableOpacity>
 

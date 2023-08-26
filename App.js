@@ -57,8 +57,8 @@ export default function App() {
         {userToken === null ? (
           // No token found, user isn't signed in
           <>
-            <Stack.Screen name="SignIn">
-              {() => <SignInScreen setToken={setToken} />}
+            <Stack.Screen name="SignIn" options={{ headerShown: false }}>
+              {(props) => <SignInScreen {...props} setToken={setToken} />}
             </Stack.Screen>
             <Stack.Screen name="SignUp" options={{ headerShown: false }}>
               {(props) => <SignUpScreen {...props} setToken={setToken} />}
