@@ -14,23 +14,31 @@ import Constants from "expo-constants";
 export default function SignInScreen({ setToken, navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handelSubmit = async () => {
     // console.log("submit");
 
-    try {
-      const response = await axios.post(
-        "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/log_in",
-        {
-          email: email,
-          password: password,
-        }
-      );
+    if (email && password) {
+      try {
+        const response = await axios.post(
+          "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/log_in",
+          {
+            email: email,
+            password: password,
+          }
+        );
 
-      console.log("response signIn>>>", response.data.token);
-      setToken(response.data.token);
-    } catch (error) {
-      console.log("catch SignInScreen>>>", error.response);
+        console.log("response signIn>>>", response.data);
+        if (response.data.token) {
+          setToken(response.data.token);
+        }
+      } catch (error) {
+        console.log("catch SignInScreen>>>", error.response.data.error);
+        setErrorMessage(error.response.data.error);
+      }
+    } else {
+      setErrorMessage("Veuillez remplir tous les champs");
     }
   };
 
@@ -64,6 +72,7 @@ export default function SignInScreen({ setToken, navigation }) {
             setPassword(text);
           }}
           value={password}
+          secureTextEntry
           placeholderTextColor="#DCDCDD"
         />
       </View>
