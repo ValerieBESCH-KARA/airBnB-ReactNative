@@ -10,6 +10,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Constants from "expo-constants";
 import { useState } from "react";
 import axios from "axios";
+import { Feather } from "@expo/vector-icons";
 
 export default function SignUpScreen({ setToken, navigation }) {
   const [email, setEmail] = useState("");
@@ -18,6 +19,11 @@ export default function SignUpScreen({ setToken, navigation }) {
   const [password, setPassword] = useState("");
   const [confimrPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const toggleShowPassword = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
   const handelSubmit = async () => {
     // console.log("handelSubmit");
@@ -74,7 +80,7 @@ export default function SignUpScreen({ setToken, navigation }) {
             setEmail(text);
           }}
           value={email}
-          placeholderTextColor="#DCDCDD"
+          placeholderTextColor="grey"
         />
         <TextInput
           style={styles.textInput}
@@ -84,7 +90,7 @@ export default function SignUpScreen({ setToken, navigation }) {
             setUsername(text);
           }}
           value={username}
-          placeholderTextColor="#DCDCDD"
+          placeholderTextColor="grey"
         />
         <TextInput
           style={[styles.textInput, styles.description]}
@@ -95,30 +101,49 @@ export default function SignUpScreen({ setToken, navigation }) {
           }}
           value={description}
           multiline
-          placeholderTextColor="#DCDCDD"
+          placeholderTextColor="grey"
         />
-        <TextInput
-          style={styles.textInput}
-          placeholder="password"
-          onChangeText={(text) => {
-            setErrorMessage("");
-            setPassword(text);
-          }}
-          secureTextEntry
-          value={password}
-          placeholderTextColor="#DCDCDD"
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="confirm password"
-          onChangeText={(text) => {
-            setErrorMessage("");
-            setConfirmPassword(text);
-          }}
-          secureTextEntry
-          value={confimrPassword}
-          placeholderTextColor="#DCDCDD"
-        />
+
+        <View style={styles.inputPassword}>
+          <TextInput
+            style={styles.input}
+            placeholder="password"
+            onChangeText={(text) => {
+              setErrorMessage("");
+              setPassword(text);
+            }}
+            secureTextEntry={!passwordVisible}
+            value={password}
+            placeholderTextColor="grey"
+          />
+          <TouchableOpacity onPress={toggleShowPassword} style={styles.icon}>
+            <Feather
+              name={passwordVisible ? "eye" : "eye-off"}
+              size={24}
+              color="black"
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.inputPassword}>
+          <TextInput
+            style={styles.input}
+            placeholder="confirm password"
+            onChangeText={(text) => {
+              setErrorMessage("");
+              setConfirmPassword(text);
+            }}
+            secureTextEntry={!passwordVisible}
+            value={confimrPassword}
+            placeholderTextColor="grey"
+          />
+          <TouchableOpacity onPress={toggleShowPassword} style={styles.icon}>
+            <Feather
+              name={passwordVisible ? "eye" : "eye-off"}
+              size={24}
+              color="black"
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
@@ -190,5 +215,21 @@ const styles = StyleSheet.create({
   },
   redirection: {
     marginVertical: 20,
+  },
+  inputPassword: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingBottom: 10,
+    borderBottomColor: "#FFBAC0",
+    borderBottomWidth: 2,
+    color: "black",
+    paddingBottom: 10,
+    marginTop: 25,
+  },
+  input: {
+    flex: 1,
+  },
+  icon: {
+    marginRight: 10,
   },
 });

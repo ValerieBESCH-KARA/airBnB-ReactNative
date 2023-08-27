@@ -10,11 +10,17 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import axios from "axios";
 import { useState } from "react";
 import Constants from "expo-constants";
+import { Feather } from "@expo/vector-icons";
 
 export default function SignInScreen({ setToken, navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const toggleShowPassword = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
   const handelSubmit = async () => {
     // console.log("submit");
@@ -35,7 +41,7 @@ export default function SignInScreen({ setToken, navigation }) {
         }
       } catch (error) {
         console.log("catch SignInScreen>>>", error.response.data.error);
-        setErrorMessage(error.response.data.error);
+        setErrorMessage("Votre email ou votre mot de passe ne correspond pas");
       }
     } else {
       setErrorMessage("Veuillez remplir tous les champs");
@@ -59,23 +65,36 @@ export default function SignInScreen({ setToken, navigation }) {
           style={styles.textInput}
           placeholder="email"
           onChangeText={(text) => {
+            setErrorMessage("");
             setEmail(text);
           }}
           value={email}
-          placeholderTextColor="#DCDCDD"
+          placeholderTextColor="grey"
         />
 
-        <TextInput
-          style={styles.textInput}
-          placeholder="password"
-          onChangeText={(text) => {
-            setPassword(text);
-          }}
-          value={password}
-          secureTextEntry
-          placeholderTextColor="#DCDCDD"
-        />
+        <View style={styles.inputPassword}>
+          <TextInput
+            style={styles.input}
+            placeholder="password"
+            onChangeText={(text) => {
+              setErrorMessage("");
+              setPassword(text);
+            }}
+            value={password}
+            secureTextEntry={!passwordVisible}
+            placeholderTextColor="grey"
+          />
+          <TouchableOpacity onPress={toggleShowPassword} style={styles.icon}>
+            <Feather
+              name={passwordVisible ? "eye" : "eye-off"}
+              size={24}
+              color="black"
+            />
+          </TouchableOpacity>
+        </View>
       </View>
+
+      {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
 
       <TouchableOpacity onPress={handelSubmit}>
         <Text style={styles.btn}>Sign in</Text>
@@ -123,6 +142,10 @@ const styles = StyleSheet.create({
   marginBottom: {
     marginBottom: 70,
   },
+  errorMessage: {
+    color: "#F9575C",
+    marginBottom: 10,
+  },
   btn: {
     fontSize: 20,
     borderColor: "#F9575C",
@@ -133,5 +156,21 @@ const styles = StyleSheet.create({
   },
   redirection: {
     marginVertical: 20,
+  },
+  inputPassword: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingBottom: 10,
+    borderBottomColor: "#FFBAC0",
+    borderBottomWidth: 2,
+    color: "black",
+    paddingBottom: 10,
+    marginTop: 25,
+  },
+  input: {
+    flex: 1,
+  },
+  icon: {
+    marginRight: 10,
   },
 });
