@@ -11,7 +11,7 @@ import ProfileScreen from "./containers/ProfileScreen";
 import SignInScreen from "./containers/SignInScreen";
 import SignUpScreen from "./containers/SignUpScreen";
 import SettingsScreen from "./containers/SettingsScreen";
-import SplashScreen from "./containers/SplashScreen";
+import HeaderLogo from "./components/HeaderLogo";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -85,24 +85,17 @@ export default function App() {
                   }}
                 >
                   {() => (
-                    <Stack.Navigator>
-                      <Stack.Screen
-                        name="Home"
-                        options={{
-                          title: "My App",
-                          headerStyle: { backgroundColor: "red" },
-                          headerTitleStyle: { color: "white" },
-                        }}
-                      >
+                    <Stack.Navigator
+                      screenOptions={{
+                        headerTitle: () => <HeaderLogo />,
+                        headerTitleAlign: "center",
+                      }}
+                    >
+                      <Stack.Screen name="Home">
                         {() => <HomeScreen />}
                       </Stack.Screen>
 
-                      <Stack.Screen
-                        name="Profile"
-                        options={{
-                          title: "User Profile",
-                        }}
-                      >
+                      <Stack.Screen name="Profile">
                         {() => <ProfileScreen />}
                       </Stack.Screen>
                     </Stack.Navigator>

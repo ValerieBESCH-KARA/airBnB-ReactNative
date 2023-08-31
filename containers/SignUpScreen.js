@@ -11,6 +11,7 @@ import Constants from "expo-constants";
 import { useState } from "react";
 import axios from "axios";
 import { Feather } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SignUpScreen({ setToken, navigation }) {
   const [email, setEmail] = useState("");
