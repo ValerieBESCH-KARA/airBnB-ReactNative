@@ -40,17 +40,26 @@ export default function HomeScreen() {
         keyExtractor={(item) => item._id}
         renderItem={(item) => {
           // console.log("item HomeScreen>>>", item);
-          console.log(item.item.user.account.photo.url);
+          // console.log(item.item.price);
           return (
             <View>
-              <Image
-                source={{ uri: item.item.photos[0].url }}
-                style={styles.pictureRoom}
-              />
+              <View style={styles.pictureRoomBloc}>
+                <Image
+                  source={{ uri: item.item.photos[0].url }}
+                  style={styles.pictureRoom}
+                />
+                <Text style={styles.price}>{item.item.price} €</Text>
+              </View>
 
-              <View>
+              <View style={styles.infoBloc}>
                 <View>
-                  <Text>{item.item.title}</Text>
+                  <Text
+                    style={styles.title}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {item.item.title}
+                  </Text>
                 </View>
                 <Image
                   source={{ uri: item.item.user.account.photo.url }}
@@ -69,15 +78,42 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 15,
     paddingVertical: 10,
+    backgroundColor: "white",
+  },
+  pictureRoomBloc: {
+    position: "relative",
   },
   pictureRoom: {
     height: 200,
     width: "100%",
     marginVertical: 10,
   },
+  price: {
+    borderColor: "black",
+    borderWidth: 1,
+    backgroundColor: "black",
+    color: "white",
+    fontSize: 18,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    position: "absolute",
+    bottom: 20,
+    left: 0,
+  },
+  infoBloc: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingBottom: 10,
+    borderBottomColor: "#F0F0F0",
+    borderBottomWidth: 1,
+  },
+  title: {
+    fontSize: 18,
+    width: 270,
+  },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 25,
+    width: 70,
+    height: 70,
+    borderRadius: 50,
   },
 });
