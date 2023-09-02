@@ -7,14 +7,16 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import LottieView from "lottie-react-native";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
 
   const [isLoading, setIsLoading] = useState(true);
   const [roomList, setRoomList] = useState([]);
+  const animation = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,7 +34,18 @@ export default function HomeScreen() {
   }, []);
 
   return isLoading ? (
-    <ActivityIndicator size="large" />
+    <View style={styles.lottieView}>
+      <LottieView
+        autoPlay
+        ref={animation}
+        style={{
+          width: "50",
+          height: "50",
+          backgroundColor: "white",
+        }}
+        source={require("../assets/animation.json")}
+      />
+    </View>
   ) : (
     <View style={styles.container}>
       <FlatList
@@ -79,6 +92,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     backgroundColor: "white",
+  },
+  lottieView: {
+    backgroundColor: "white",
+    height: "100%",
   },
   pictureRoomBloc: {
     position: "relative",
