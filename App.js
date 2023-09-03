@@ -92,7 +92,7 @@ export default function App() {
                       }}
                     >
                       <Stack.Screen name="Home">
-                        {() => <HomeScreen />}
+                        {(props) => <HomeScreen {...props} />}
                       </Stack.Screen>
 
                       <Stack.Screen name="Profile">

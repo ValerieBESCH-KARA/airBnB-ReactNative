@@ -1,19 +1,17 @@
-import { useNavigation } from "@react-navigation/core";
 import {
-  ActivityIndicator,
   View,
   FlatList,
   Text,
   StyleSheet,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import LottieView from "lottie-react-native";
+import { FontAwesome } from "@expo/vector-icons";
 
-export default function HomeScreen() {
-  const navigation = useNavigation();
-
+export default function HomeScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(true);
   const [roomList, setRoomList] = useState([]);
   const animation = useRef(null);
@@ -32,6 +30,22 @@ export default function HomeScreen() {
 
     fetchData();
   }, []);
+
+  const displayStars = (num) => {
+    const tab = [];
+
+    for (let i = 1; i <= 5; i++) {
+      if (i <= num) {
+        tab.push(<FontAwesome name="star" size={20} color="#FFB000" key={i} />);
+      } else {
+        tab.push(<FontAwesome name="star" size={20} color="grey" key={i} />);
+      }
+    }
+    return tab;
+    // console.log(tab);
+  };
+
+  // displayStars(5);
 
   return isLoading ? (
     <View style={styles.lottieView}>
@@ -53,9 +67,9 @@ export default function HomeScreen() {
         keyExtractor={(item) => item._id}
         renderItem={(item) => {
           // console.log("item HomeScreen>>>", item);
-          // console.log(item.item.price);
+          console.log(item.item);
           return (
-            <View>
+            <TouchableOpacity onPress={() => {}}>
               <View style={styles.pictureRoomBloc}>
                 <Image
                   source={{ uri: item.item.photos[0].url }}
@@ -65,7 +79,7 @@ export default function HomeScreen() {
               </View>
 
               <View style={styles.infoBloc}>
-                <View>
+                <View style={styles.info}>
                   <Text
                     style={styles.title}
                     numberOfLines={1}
@@ -73,13 +87,20 @@ export default function HomeScreen() {
                   >
                     {item.item.title}
                   </Text>
+
+                  <View style={styles.starsBloc}>
+                    {displayStars(item.item.ratingValue)}
+                    <Text style={styles.reviews}>
+                      {item.item.reviews} reviews
+                    </Text>
+                  </View>
                 </View>
                 <Image
                   source={{ uri: item.item.user.account.photo.url }}
                   style={styles.avatar}
                 />
               </View>
-            </View>
+            </TouchableOpacity>
           );
         }}
       />
@@ -124,9 +145,23 @@ const styles = StyleSheet.create({
     borderBottomColor: "#F0F0F0",
     borderBottomWidth: 1,
   },
+  info: {
+    justifyContent: "space-between",
+  },
   title: {
     fontSize: 18,
     width: 270,
+  },
+  starsBloc: {
+    flexDirection: "row",
+    alignItems: "center",
+
+    gap: 5,
+    marginBottom: 7,
+  },
+  reviews: {
+    color: "grey",
+    fontSize: 13,
   },
   avatar: {
     width: 70,
